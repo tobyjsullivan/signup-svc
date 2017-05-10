@@ -1,14 +1,16 @@
 package profile
 
-import "github.com/tobyjsullivan/life/signup-svc/store"
-
-const (
-    EventType_ProfileCreated = store.EventType("ProfileCreated")
-    EventType_NameChanged = store.EventType("NameChanged")
+import (
+    "github.com/tobyjsullivan/life/signup-svc/store2"
 )
 
-func NewProfileCreated(profileId string, expectedVersion uint, firstName, lastName string) *store.Event {
-    return &store.Event{
+const (
+    EventType_ProfileCreated = store2.EventType("ProfileCreated")
+    EventType_NameChanged = store2.EventType("NameChanged")
+)
+
+func NewProfileCreated(profileId string, expectedVersion uint, firstName, lastName string) *store2.Event {
+    return &store2.Event{
         Version: expectedVersion,
         Type: EventType_ProfileCreated,
         Data: map[string]string {
@@ -19,8 +21,8 @@ func NewProfileCreated(profileId string, expectedVersion uint, firstName, lastNa
     }
 }
 
-func NewNameChanged(expectedVersion uint, firstName, lastName string) *store.Event {
-    return &store.Event{
+func NewNameChanged(expectedVersion uint, firstName, lastName string) *store2.Event {
+    return &store2.Event{
         Version:expectedVersion,
         Type: EventType_NameChanged,
         Data: map[string]string {

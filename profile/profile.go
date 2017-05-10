@@ -1,10 +1,9 @@
 package profile
 
 import (
-    "fmt"
     "log"
     "os"
-    "github.com/tobyjsullivan/life/signup-svc/store"
+    "github.com/tobyjsullivan/life/signup-svc/store2"
 )
 
 var logger *log.Logger
@@ -21,7 +20,7 @@ type Profile struct {
     lastName        string
 }
 
-func (p *Profile) apply(event *store.Event) {
+func (p *Profile) apply(event *store2.Event) {
     switch event.Type {
     case EventType_ProfileCreated:
         p.profileID = event.Data["profileId"]
@@ -34,11 +33,8 @@ func (p *Profile) apply(event *store.Event) {
 
     p.version++
 }
-func (p *Profile) String() string {
-    return fmt.Sprintf("(Profile, %s, %s, %s)", p.profileID, p.firstName, p.lastName)
-}
 
-func NewProfileFromHistory(events []*store.Event) *Profile {
+func NewProfileFromHistory(events []*store2.Event) *Profile {
     p := &Profile{}
     for _, e := range events {
         p.apply(e)

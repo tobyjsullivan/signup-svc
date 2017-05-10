@@ -1,17 +1,17 @@
 package profile
 
 import (
-    "github.com/tobyjsullivan/life/signup-svc/store"
     "github.com/satori/go.uuid"
     "errors"
     "fmt"
+    "github.com/tobyjsullivan/life/signup-svc/store2"
 )
 
 type Service struct {
 }
 
 func NewService() *Service {
-    s := &Service{    }
+    s := &Service{}
 
     return s
 }
@@ -19,14 +19,15 @@ func NewService() *Service {
 func (s *Service) CreateProfile(firstName, lastName string) error {
     id := "profile-"+uuid.NewV4().String()
 
-    st, err := store.NewStore(id)
+    st, err := store2.OpenStore(id)
     if err != nil {
         return err
     }
 
     e := NewProfileCreated(id, 0, firstName, lastName)
 
-    if err := st.Commit([]*store.Event{e}); err != nil {
+    if err := st.Commit(e); err != nil {
+        logger.Println("Error on commit: "+err.Error())
         return err
     }
 
@@ -35,7 +36,7 @@ func (s *Service) CreateProfile(firstName, lastName string) error {
 }
 
 func (s *Service) ChangeName(profileId, firstName, lastName string) error {
-    st, err := store.NewStore(profileId)
+    st, err := store2.OpenStore(profileId)
     if err != nil {
         return err
     }
@@ -49,7 +50,8 @@ func (s *Service) ChangeName(profileId, firstName, lastName string) error {
 
     e := NewNameChanged(aggregate.version, firstName, lastName)
 
-    if err := st.Commit([]*store.Event{e}); err != nil {
+    if err := st.Commit(e); err != nil {
+        logger.Println("Error on commit: "+err.Error())
         return err
     }
 
